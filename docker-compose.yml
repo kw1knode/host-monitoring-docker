@@ -18,6 +18,7 @@ volumes:
     nginx_vhost: {}
     nginx_html: {}
     nginx_acme: {}
+    loki_data: {}
 
 services:
 
@@ -231,3 +232,42 @@ services:
     labels:
       org.label-schema.group: "monitoring"
     logging: *default-logging
+    
+    
+######################################################################################
+#####################                   LOKI                   #######################
+######################################################################################
+
+  loki:
+    image: grafana/loki:2.4.0
+    container_name: loki
+    volumes: 
+      - loki_data:/loki
+      - ./loki/loki-config.yml:/etc/loki/local-config.yaml
+    expose:
+      - "3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+    logging: *default-logging
+    
+    
+######################################################################################
+#####################                 PROMTAIL                 #######################
+######################################################################################
+
+  promtail:
+    image: grafana/promtail:2.4.0
+    volumes:
+      - ./promtail/promtail-config.yml:/etc/promtail-config/promtail.yml
+    expose:
+      - "1514"
+    command: -config.file=/etc/promtail-config/promtail.yml
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+    logging: *default-logging
+
