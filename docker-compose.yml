@@ -262,6 +262,7 @@ services:
     image: grafana/promtail:2.4.0
     volumes:
       - ./promtail/promtail-config.yml:/etc/promtail-config/promtail.yml
+      - /var/lib/docker:/var/lib/docker:ro
     expose:
       - "1514"
     command: -config.file=/etc/promtail-config/promtail.yml
