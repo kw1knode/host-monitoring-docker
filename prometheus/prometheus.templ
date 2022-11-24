@@ -41,6 +41,7 @@ scrape_configs:
 
   - job_name: 'erigon'
     scrape_interval: 5s
+    scheme: http
     static_configs:
       - targets: ['$ERIGON_IP:6969']
     metrics_path: "/debug/metrics/prometheus"
